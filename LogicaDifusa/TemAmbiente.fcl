@@ -1,0 +1,26 @@
+FUNCTION_BLOCK ambiente
+VAR_INPUT
+    temAmbiente : REAL;
+END_VAR
+VAR_OUTPUT
+    potencia : REAL;
+END_VAR
+FUZZIFY temAmbiente
+    TERM frio := (14.9, 0) (14.9, 1) (25, 0) ;
+    TERM templado := (14.9, 0) (25, 1) (35.1, 0);
+    TERM caliente := (25, 0) (35.1, 1) (35.1, 0);
+END_FUZZIFY
+DEFUZZIFY potencia
+    TERM baja := (0, 0) (0, 1) (50, 0);
+    TERM media := (0, 0) (50, 1) (100, 0);
+    TERM alta := (50, 0) (100, 1) (100, 0);
+    METHOD : COG;
+END_DEFUZZIFY
+RULEBLOCK clima
+    AND : MIN;
+    ACT : MIN;
+    RULE 1 : IF temAmbiente IS frio THEN potencia IS baja;
+    RULE 2 : IF temAmbiente IS templado THEN potencia IS media;
+    RULE 3 : IF temAmbiente IS caliente THEN potencia IS alta;
+END_RULEBLOCK
+END_FUNCTION_BLOCK
